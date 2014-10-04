@@ -1,7 +1,7 @@
 learn-new-words
 ===============
 
-Given a book, find novel words in it.
+Given a book, find novel words in it, and show them in a context.
 
 Prerequisites
 ----

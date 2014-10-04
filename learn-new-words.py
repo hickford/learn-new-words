@@ -52,4 +52,5 @@ if __name__ == "__main__":
                 continue
 
             found.add(word)
-            print(word)
+            example = next(line for line in nltk.tokenize.line_tokenize(sentence) if word in line)
+            print("{0}: {1}".format(word, example))
