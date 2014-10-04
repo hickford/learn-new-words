@@ -1,13 +1,5 @@
 #!python
-import sys
-import fileinput
 import nltk
-
-def words():
-    tokenizer = nltk.tokenize.WordPunctTokenizer()
-    for line in fileinput.input(openhook=fileinput.hook_encoded("utf-8")):
-        for word in tokenizer.tokenize(line):
-            yield word
 
 dictionary = set(open('dictionary.txt').read().split())
 commons = set(open('common.txt').read().split())
@@ -32,24 +24,32 @@ def is_common(word):
     if wordnet.lemmatize(word, 'v') in commons:
         return True
 
-found = set()
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser("Find novel words in text")
+    parser.add_argument('book', help="Path to utf-8 text document")
+    args = parser.parse_args()
 
-for word in words():
-    if not word.isalpha():
-        continue
+    found = set()
 
-    if not word.islower():
-        continue
+    text = open(args.book, encoding="utf-8").read()
+    for sentence in nltk.tokenize.sent_tokenize(text):
+        for word in nltk.tokenize.wordpunct_tokenize(sentence):
+            if not word.isalpha():
+                continue
 
-    if word not in dictionary:
-        # probably a name
-        continue
+            if not word.islower():
+                continue
 
-    if word in found:
-        continue
+            if word not in dictionary:
+                # probably a name
+                continue
 
-    if is_common(word):
-        continue
+            if word in found:
+                continue
 
-    found.add(word)
-    print(word)
+            if is_common(word):
+                continue
+
+            found.add(word)
+            print(word)
